@@ -26,6 +26,7 @@ module FFMPEG
       end
 
       @report_file = transcoder_options.fetch(:report_file){ nil }
+      @input_options =  transcoder_options.fetch(:input_options){ nil }
 
       @transcoder_options = transcoder_options
       @errors = []
@@ -57,7 +58,7 @@ module FFMPEG
     # frame= 4855 fps= 46 q=31.0 size=   45306kB time=00:02:42.28 bitrate=2287.0kbits/
     def transcode_movie
       set_ffreport = "FFREPORT=file=#{@report_file}" if @report_file
-      @command = "#{set_ffreport} #{FFMPEG.ffmpeg_binary} -y -i #{Shellwords.escape(@movie.path)} #{@raw_options} #{Shellwords.escape(@output_file)}"
+      @command = "#{set_ffreport} #{FFMPEG.ffmpeg_binary} #{@input_options} -y -i #{Shellwords.escape(@movie.path)} #{@raw_options} #{Shellwords.escape(@output_file)}"
       FFMPEG.logger.info("Running transcoding...\n#{@command}\n")
       @output = ""
 
